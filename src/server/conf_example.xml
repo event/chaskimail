@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<chaski:config xmlns:chaski="urn:chaski:org">
+  <chaski:port>25</chaski:port>
+  <chaski:log_conf>logger_conf.ini</chaski:log_conf>
+  <chaski:message_size>1M</chaski:message_size>
+  <chaski:my_name>localhost</chaski:my_name>
+  <chaski:schema_uri>
+    chaski.xsd
+  </chaski:schema_uri>
+
+  <chaski:plugin_modules>
+
+    <chaski:plugin>
+      <chaski:path>chaski_plugin.SimpleUserAuth</chaski:path>
+      <chaski:parameters>
+	userconf = user.conf
+      </chaski:parameters>
+    </chaski:plugin>
+    <chaski:plugin>
+      <chaski:path>chaski_plugin.ReceiveMessageToPlainFile</chaski:path>
+      <chaski:parameters>
+	basedir = /var/mailpool
+      </chaski:parameters>
+    </chaski:plugin>
+    <chaski:plugin>
+      <chaski:path>chaski_plugin.FetchMessagesFromPlainFile</chaski:path>
+      <chaski:parameters>
+	basedir = /var/mailpool
+      </chaski:parameters>
+    </chaski:plugin>
+
+  </chaski:plugin_modules>
+</chaski:config>

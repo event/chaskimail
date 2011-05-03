@@ -1,0 +1,19 @@
+<?xml version='1.0' charset='UTF-8'?>
+<chaski:Fetch xmlns:chaski="urn:chaski:org">
+  <chaski:Credentials>
+    <chaski:Username>event</chaski:Username>
+    <chaski:Password>Chaski</chaski:Password>
+  </chaski:Credentials>
+
+  <chaski:To>user1</chaski:To>
+  <chaski:To>user2</chaski:To>
+  <chaski:To>user3</chaski:To>
+
+  <chaski:Conditions>
+    <chaski:OnlyHeader>true</chaski:OnlyHeader>
+    <chaski:MinReceiveDate>2006-07-28</chaski:MinReceiveDate>  
+    <chaski:MaxReceiveDate>2006-08-28</chaski:MaxReceiveDate>
+    <chaski:RemoveAfterFetch>false</chaski:RemoveAfterFetch>
+  </chaski:Conditions>
+
+</chaski:Fetch>

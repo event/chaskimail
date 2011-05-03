@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	   xmlns="urn:chaski:org"
+	   targetNamespace="urn:chaski:org"
+	   elementFormDefault="qualified">
+
+  <!-- common types -->
+  <xs:simpleType name="content_encoding">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="base64" />
+      <xs:enumeration value="hex" />
+      <xs:enumeration value="plain" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="tcp_port">
+    <xs:restriction base="xs:integer">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="65535"/>
+    </xs:restriction>
+  </xs:simpleType>	
+
+  <xs:complexType name="chaski_creds">
+    <xs:sequence>
+      <xs:element name="Username" type="xs:string" minOccurs="1"/>
+      <xs:element name="Password" type="xs:string" minOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="empty"/>
+
+  <!-- Chaski mail message -->
+  <xs:complexType name="chapter_content">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+	<xs:attribute name="encoding" type="content_encoding" default="plain"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+
+  <xs:complexType name="chaski_chapter">
+    <xs:sequence>
+      <xs:element name="ChapterName" type="xs:string"/>
+      <xs:element name="MIMEType" type="xs:string"/>
+      <xs:element name="ChapterContent" type="chapter_content">
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+
+  <xs:complexType name="chaski_message">
+    <xs:sequence>
+      <xs:element name="From" type="xs:string"/>
+      <xs:element name="To" type="xs:string" 
+		  minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="SecretTo" type="xs:string" 
+		  minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Subject" type="xs:string"/>
+      <xs:element name="Chapter" type="chaski_chapter" maxOccurs="unbounded"/>
+      <xs:any minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="chaski_mail">
+    <xs:sequence>
+      <xs:element name="Credentials" type="chaski_creds" minOccurs="0"/>
+      <xs:element name="Message" type="chaski_message" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:element name="Mail" type="chaski_mail"/>
+  <!-- end Chaski mail message -->
+
+  <!-- Chaski fetch message -->
+  <xs:complexType name="chaski_fetch_conditions">
+    <xs:sequence>
+      <xs:element name="OnlyHeader" type="xs:boolean"/>
+      <xs:element name="MinReceiveDate" type="xs:date" minOccurs="0"/>
+      <xs:element name="MaxReceiveDate" type="xs:date" minOccurs="0"/>
+      <xs:element name="RemoveAfterFetch" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="chaski_fetch">
+    <xs:sequence>
+      <xs:element name="Credentials" type="chaski_creds"/>
+      <xs:element name="To" type="xs:string" maxOccurs="unbounded"/>
+      <xs:element name="Conditions" type="chaski_fetch_conditions"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:element name="Fetch" type="chaski_fetch"/>
+  <!-- end Chaski fetch message -->
+
+  <!-- Chaski service response -->
+  <xs:complexType name="chaski_result">
+    <xs:sequence>
+      <xs:element name="Status" type="xs:string"/>
+      <xs:element name="Description" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:element name="Result" type="chaski_result"/>
+  <!-- end Chaski service response -->
+
+  <!-- Chaski config -->
+  <xs:complexType name="chaski_plugin">
+    <xs:sequence>
+      <xs:element name="path" type="xs:string"/>
+      <xs:element name="parameters" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="chaski_plugins">
+    <xs:sequence>
+      <xs:element name="plugin" type="chaski_plugin" 
+		  minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  
+  <xs:complexType name="chaski_config">
+    <xs:sequence>
+      <xs:element name="port" type="tcp_port" />
+      <xs:element name="log_conf" type="xs:string"/>
+      <xs:element name="message_size" type="xs:string"/>
+      <xs:element name="my_name" type="xs:string"/>
+      <xs:element name="schema_uri" type="xs:string"/>
+      <xs:element name="plugin_modules" type="chaski_plugins" />
+    </xs:sequence>
+  </xs:complexType>
+  
+  <xs:element name="config" type="chaski_config"/>
+  <!-- end Chaski config -->
+
+</xs:schema>
+
